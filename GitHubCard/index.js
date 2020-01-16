@@ -24,7 +24,13 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "keyeric",
+  "tdefriess",
+  "M-PAW",
+  "guidra-rev",
+  "Rzv0000"
+];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -88,6 +94,12 @@ function BuildCard(o_Data)
 }
 
 axios.get("https://api.github.com/users/lgv-0").then((response) =>
+  {
+    document.getElementsByClassName("cards")[0].appendChild(BuildCard(response.data));
+  });
+
+for (let i = 0; i < followersArray.length; i++)
+  axios.get("https://api.github.com/users/" + followersArray[i]).then((response) =>
   {
     document.getElementsByClassName("cards")[0].appendChild(BuildCard(response.data));
   });
