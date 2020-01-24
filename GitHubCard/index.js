@@ -24,7 +24,13 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  "keyeric",
+  "tdefriess",
+  "M-PAW",
+  "guidra-rev",
+  "Rzv0000"
+];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,6 +51,58 @@ const followersArray = [];
 </div>
 
 */
+
+Element.prototype.setLastAttr = function(s_Key, s_Value)
+    {
+        this.children[this.children.length - 1].setAttribute(s_Key, s_Value);
+    };
+
+function BuildCard(o_Data)
+{
+  let Card = document.createElement("div");
+  Card.setAttribute("class", "card");
+
+  Card.appendChild(document.createElement("img"));
+  Card.setLastAttr("src", o_Data["avatar_url"]);
+
+  ///////////////////////////
+  let CardInfo = document.createElement("div");
+  CardInfo.setAttribute("class", "card-info");
+  
+  CardInfo.appendChild(Object.assign(document.createElement("h3"), {"innerText":o_Data["name"]}));
+  CardInfo.setLastAttr("class", "name");
+
+  CardInfo.appendChild(Object.assign(document.createElement("p"), {"innerText":o_Data["login"]}));
+  CardInfo.setLastAttr("class", "username");
+
+  CardInfo.appendChild(Object.assign(document.createElement("p"), {"innerText":`Location: ${o_Data["location"]}`}));
+
+  CardInfo.appendChild(Object.assign(document.createElement("p"), {"innerText":"Profile: "}));
+  CardInfo.children[CardInfo.children.length - 1].appendChild(Object.assign(document.createElement("a"), {"innerText":o_Data["login"]}));
+  CardInfo.children[CardInfo.children.length - 1].setLastAttr("href", o_Data["html_url"]);
+
+  CardInfo.appendChild(Object.assign(document.createElement("p"), {"innerText":`Followers: ${o_Data["followers"]}`}));
+
+  CardInfo.appendChild(Object.assign(document.createElement("p"), {"innerText":`Following: ${o_Data["following"]}`}));
+
+  CardInfo.appendChild(Object.assign(document.createElement("p"), {"innerText":`Bio: ${o_Data["bio"]}`}));
+
+  ///////////////////////////
+  Card.appendChild(CardInfo);
+
+  return Card;
+}
+
+axios.get("https://api.github.com/users/lgv-0").then((response) =>
+  {
+    document.getElementsByClassName("cards")[0].appendChild(BuildCard(response.data));
+  });
+
+for (let i = 0; i < followersArray.length; i++)
+  axios.get("https://api.github.com/users/" + followersArray[i]).then((response) =>
+  {
+    document.getElementsByClassName("cards")[0].appendChild(BuildCard(response.data));
+  });
 
 /* List of LS Instructors Github username's: 
   tetondan
